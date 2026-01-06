@@ -21,7 +21,7 @@ export const goodsFromServer = [
   'Garlic',
 ];
 
-const setMode = (mode: string = ''): string[] => {
+const getSortedGoods = (mode: SortMode | null): string[] => {
   const goodsList = [...goodsFromServer];
 
   if (mode === SortMode.abc) {
@@ -37,9 +37,9 @@ const setMode = (mode: string = ''): string[] => {
 
 export const App: React.FC = () => {
   const [isReversed, setIsReversed] = useState(false);
-  const [mode, setModeState] = useState('');
+  const [mode, setModeState] = useState<SortMode | null>(null);
 
-  const goodsList = setMode(mode);
+  const goodsList = getSortedGoods(mode);
 
   if (isReversed) {
     goodsList.reverse();
@@ -50,9 +50,9 @@ export const App: React.FC = () => {
       <div className="buttons">
         <button
           type="button"
-          className={`button is-info ${mode === 'abc' ? '' : 'is-light'}`}
+          className={`button is-info ${mode === SortMode.abc ? '' : 'is-light'}`}
           onClick={() => {
-            setModeState('abc');
+            setModeState(SortMode.abc);
           }}
         >
           Sort alphabetically
@@ -60,9 +60,9 @@ export const App: React.FC = () => {
 
         <button
           type="button"
-          className={`button is-success ${mode === 'length' ? '' : 'is-light'}`}
+          className={`button is-success ${mode === SortMode.length ? '' : 'is-light'}`}
           onClick={() => {
-            setModeState('length');
+            setModeState(SortMode.length);
           }}
         >
           Sort by length
@@ -78,12 +78,12 @@ export const App: React.FC = () => {
           Reverse
         </button>
 
-        {(mode.length > 0 || isReversed) && (
+        {(mode !== null || isReversed) && (
           <button
             type="button"
             className="button is-danger is-light"
             onClick={() => {
-              setModeState('');
+              setModeState(null);
               setIsReversed(false);
             }}
           >
